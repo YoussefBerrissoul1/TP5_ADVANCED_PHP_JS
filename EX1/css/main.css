@@ -1,0 +1,42 @@
+:root {
+    --primary-color: #6499E9;
+    --secondary-color: #9EDDFF;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 10px; 
+}
+
+.button-container {
+    display: flex;
+    gap: 10px; 
+}
+
+#delete, #edit {
+    border: 1px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    color: black;
+    transition-duration: 1s;
+}
+
+#delete {
+    background: rgb(255, 51, 85);
+}
+
+#delete:hover {
+    color: gray;
+    background: pink;
+}
+
+#edit {
+    background: var(--primary-color);
+}
+
+#edit:hover {
+    color: gray;
+    background: var(--secondary-color);
+} 
