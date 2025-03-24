@@ -16,23 +16,18 @@ document.addEventListener("DOMContentLoaded", () => {
         input.style.color = "";
     });
 
-
-    let li = document.getElementsByClassName("list-group-item");
     let editBtn = document.getElementsByClassName("edit");
     let deleteBtn = document.getElementsByClassName("delete");
 
     for (let i = 0; i < deleteBtn.length; i++) {
-        deleteBtn[i].addEventListener("click", function () {
-            console.log("Delete button clicked");
+        deleteBtn[i].addEventListener("click", ()=> {
             let listItem = this.closest("li"); 
-            console.log("Deleting item:", listItem);
             listItem.remove();
         });
     }
 
     for (let i = 0; i < editBtn.length; i++) {
-        editBtn[i].addEventListener("click", function () {
-            console.log("Edit button clicked");
+        editBtn[i].addEventListener("click", ()=> {
             let listItem = this.closest("li"); 
             let value = listItem.querySelector(".task-text").innerText.trim(); 
             console.log("Editing item with value:", value);
