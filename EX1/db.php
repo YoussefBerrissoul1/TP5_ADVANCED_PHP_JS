@@ -8,5 +8,4 @@ if (!$conn) {
     die('Erreur de connexion : ' . mysqli_connect_error());
 }
 
-echo 'Connexion réussie !';
 ?>
