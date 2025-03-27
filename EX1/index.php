@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require './mvc/db.php';
 
 $sql = "SELECT * FROM tasks";
 $result = $conn->query($sql);
@@ -18,7 +18,7 @@ $result = $conn->query($sql);
     <div class="container mt-4">
         <h2 class="mb-3">To-Do List</h2>
 
-        <form method="POST" action="insert.php">
+        <form method="POST" action="./mvc/insert.php">
             <div class="mb-3">
                 <input id="input" type="text" name="task" class="form-control" placeholder="Entrez une nouvelle tâche" required>
             </div>
@@ -30,13 +30,13 @@ $result = $conn->query($sql);
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span class="task-text"><?= htmlspecialchars($task['task']) ?></span>
                     <div class="button-container">
-                        <!-- Formulaire de suppression avec ID -->
-                        <form method="POST" action="delete.php" style="display:inline;">
+
+                        <form method="POST" action="./mvc/delete.php" style="display:inline;">
                             <input type="hidden" name="id" value="<?= $task['id'] ?>">
                             <button type="submit" class="delete btn btn-danger btn-sm">Delete</button>
                         </form>
 
-                        <form method="POST" action="update.php" style="display:inline;">
+                        <form method="POST" action="./mvc/update.php" style="display:inline;">
                             <input type="hidden" name="id" value="<?= $task['id'] ?>">
                             <input class="hideTask" style="display: none;" type="text" name="task" value="<?= htmlspecialchars($task['task']) ?>" required>
                             <button type="submit" class="edit btn btn-warning btn-sm">Edit</button>
