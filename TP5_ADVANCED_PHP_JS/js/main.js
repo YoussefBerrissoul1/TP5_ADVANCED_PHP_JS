@@ -1,8 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let input = document.getElementById("input");
-    let btn = document.getElementById("btn");
+    const input = document.getElementById("input");
+    const btn = document.getElementById("btn");
+    const searchInput = document.getElementById("searchInput");
+    const sortBtn = document.getElementById("sortBtn");
+    const hideTasks = document.getElementsByClassName("hideTask");
+    const editBtns = document.getElementsByClassName("edit");
+    let ascending = true;
 
-    // Validation du champ input avant soumission
+    //  Validation champ vide
     btn.addEventListener("click", (event) => {
         if (input.value.trim() === "") {
             input.style.border = "1px solid red";
@@ -14,48 +19,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
     input.addEventListener("keypress", () => {
         input.style.border = "";
-        input.style.color = "";
     });
 
-    // Gestion de l'affichage des champs de modification
-    let hideTasks = document.getElementsByClassName("hideTask");
-    let editBtns = document.getElementsByClassName("edit");
-
+    //  Gestion édition des tâches
     for (let i = 0; i < editBtns.length; i++) {
-        editBtns[i].addEventListener("click", (event) => {
-            event.preventDefault(); // Empêche la soumission immédiate du formulaire
+        editBtns[i].addEventListener("click", function (event) {
+            event.preventDefault();
 
-            // Cacher le texte de la tâche
-            let taskText = editBtns[i].closest("li").querySelector(".task-text");
-            taskText.style.display = "none"; // Cache le texte de la tâche
+            const taskText = editBtns[i].closest("li").querySelector(".task-text");
 
-            // Modifier le texte du bouton "Edit" en "Save"
-            editBtns[i].innerText = "Save"; 
-
-            // Afficher l'input caché pour permettre l'édition
-            hideTasks[i].style.display = "inline-block"; 
-
-            // Focaliser l'input pour commencer à modifier
-            hideTasks[i].focus();
-
-            // Gérer la soumission de la tâche modifiée
-            editBtns[i].addEventListener("click", (event) => {
-                event.preventDefault(); // Empêche la soumission immédiate du formulaire
-
-                // Récupérer la nouvelle valeur de la tâche
-                let updatedTask = hideTasks[i].value;
-
-                // Mettre à jour le texte de la tâche
-                taskText.innerText = updatedTask;
-                taskText.style.display = "inline"; // Réafficher le texte de la tâche
-
-                // Cacher l'input et remettre le bouton à "Edit"
-                hideTasks[i].style.display = "none"; 
-                editBtns[i].innerText = "Edit"; 
-
-                // Soumettre le formulaire pour enregistrer la modification (exemple avec un formulaire classique)
+            if (editBtns[i].innerText === "Edit") {
+                taskText.style.display = "none";
+                hideTasks[i].style.display = "inline-block";
+                editBtns[i].innerText = "Save";
+                hideTasks[i].focus();
+            } else {
+                taskText.innerText = hideTasks[i].value;
+                taskText.style.display = "inline";
+                hideTasks[i].style.display = "none";
+                editBtns[i].innerText = "Edit";
                 editBtns[i].closest("form").submit();
-            });
+            }
         });
     }
+
+    //  Filtrage
+    searchInput.addEventListener("input", () => {
+        const filter = searchInput.value.toLowerCase();
+        document.querySelectorAll(".list-group-item").forEach(item => {
+            const text = item.querySelector(".task-text").textContent.toLowerCase();
+            item.style.display = text.includes(filter) ? "" : "none";
+        });
+    });
+
+    //  Tri alphabétique
+    sortBtn.addEventListener("click", () => {
+        const items = Array.from(document.querySelectorAll(".list-group-item"));
+        items.sort((a, b) => {
+            const textA = a.querySelector(".task-text").textContent.toLowerCase();
+            const textB = b.querySelector(".task-text").textContent.toLowerCase();
+            return ascending ? textA.localeCompare(textB) : textB.localeCompare(textA);
+        });
+        ascending = !ascending;
+        const list = document.querySelector(".list-group");
+        list.innerHTML = "";
+        items.forEach(item => list.appendChild(item));
+    });
+
+    //  Gestion des cases cochées "termine"
+    document.querySelectorAll(".mark-complete").forEach(checkbox => {
+        checkbox.addEventListener("change", function () {
+            const id = this.dataset.id;
+            fetch("./mvc/update_status.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `id=${id}&completed=${this.checked ? 1 : 0}`
+            }).then(() => location.reload());
+        });
+    });
 });

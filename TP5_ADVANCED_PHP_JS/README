@@ -1,0 +1,11 @@
+first : create the DB after create new table Tasks  
+-- CREATE TABLE tasks (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     task VARCHAR(255) NOT NULL,
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );
+
+Pour exercice 3:
+-- ALTER TABLE tasks ADD completed TINYINT(1) DEFAULT 0;
+
+Also you need to create .env file 
